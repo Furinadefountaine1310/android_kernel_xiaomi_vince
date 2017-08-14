@@ -146,7 +146,7 @@ static bool waltgov_should_update_freq(struct waltgov_policy *wg_policy, u64 tim
 		return false;
 #endif
 
-	if (!cpufreq_can_do_remote_dvfs(wg_policy->policy))
+	if (wg_policy->policy->fast_switch_enabled && !cpufreq_can_do_remote_dvfs(wg_policy->policy))
 		return false;
 
 	if (unlikely(wg_policy->limits_changed)) {
