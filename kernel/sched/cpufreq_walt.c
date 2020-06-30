@@ -132,7 +132,7 @@ static DEFINE_PER_CPU(struct waltgov_cpu, waltgov_cpu);
 static unsigned int stale_ns;
 static DEFINE_PER_CPU(struct waltgov_tunables *, cached_tunables);
 
-#define DEFAULT_TARGET_LOAD (0)
+#define DEFAULT_TARGET_LOAD (100)
 static int default_target_loads[] = {DEFAULT_TARGET_LOAD};
 
 /************************ Governor internals ***********************/
@@ -145,6 +145,9 @@ static bool waltgov_should_update_freq(struct waltgov_policy *wg_policy, u64 tim
 	if (!cpufreq_this_cpu_can_update(wg_policy->policy))
 		return false;
 #endif
+
+	if (!cpufreq_can_do_remote_dvfs(wg_policy->policy))
+		return false;
 
 	if (unlikely(wg_policy->limits_changed)) {
 		wg_policy->limits_changed = false;
@@ -1757,6 +1760,9 @@ struct cpufreq_governor *cpufreq_default_governor(void)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 19, 0)
 static int __init waltgov_register(void)
 {
+	int cpu;
+	for_each_possible_cpu(cpu)
+		per_cpu(waltgov_cpu, cpu).cpu = cpu;
 	return cpufreq_register_governor(&walt_gov);
 }
 fs_initcall(waltgov_register);
