@@ -149,9 +149,11 @@ static void cpuidle_idle_call(void)
 	 * so no more rcu read side critical sections and one more
 	 * step to the grace period
 	 */
-	rcu_idle_enter();
 
 	if (cpuidle_not_available(drv, dev)) {
+		tick_nohz_idle_stop_tick();
+		rcu_idle_enter();
+
 		default_idle_call();
 		goto exit_idle;
 	}
@@ -165,9 +167,9 @@ static void cpuidle_idle_call(void)
 	 * timekeeping to prevent timer interrupts from kicking us out of idle
 	 * until a proper wakeup interrupt happens.
 	 */
-
 	if (idle_should_freeze() || dev->use_deepest_state) {
 		if (idle_should_freeze()) {
+			rcu_idle_enter();
 			entered_state = cpuidle_enter_freeze(drv, dev);
 			if (entered_state > 0) {
 				local_irq_enable();
@@ -175,14 +177,26 @@ static void cpuidle_idle_call(void)
 			}
 		}
 
+		rcu_idle_exit();
+		tick_nohz_idle_stop_tick();
+		rcu_idle_enter();
 		next_state = cpuidle_find_deepest_state(drv, dev);
 		call_cpuidle(drv, dev, next_state);
 	} else {
+		bool stop_tick = true;
+
 		/*
 		 * Ask the cpuidle framework to choose a convenient idle state.
 		 */
-		next_state = cpuidle_select(drv, dev);
+		next_state = cpuidle_select(drv, dev, &stop_tick);
 		entered_state = call_cpuidle(drv, dev, next_state);
+		if (stop_tick)
+			tick_nohz_idle_stop_tick();
+		else
+			tick_nohz_idle_retain_tick();
+
+		rcu_idle_enter();
+		
 		/*
 		 * Give the governor an opportunity to reflect on the outcome
 		 */
@@ -228,6 +242,7 @@ static void cpu_idle_loop(void)
 			rmb();
 
 			if (cpu_is_offline(cpu)) {
+				tick_nohz_idle_stop_tick_protected();
 				cpuhp_report_idle_dead();
 				arch_cpu_idle_dead();
 			}
@@ -245,11 +260,12 @@ static void cpu_idle_loop(void)
 			 * away
 			 */
 			if (cpu_idle_force_poll || tick_check_broadcast_expired() ||
-					is_reserved(cpu))
+					is_reserved(cpu)) {
+				tick_nohz_idle_restart_tick();
 				cpu_idle_poll();
-			else
+			} else {
 				cpuidle_idle_call();
-
+			}
 			arch_cpu_idle_exit();
 		}
 
