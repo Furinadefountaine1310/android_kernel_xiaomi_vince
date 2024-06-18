@@ -91,7 +91,6 @@ static ssize_t mbox_test_message_write(struct file *filp,
 				       size_t count, loff_t *ppos)
 {
 	struct mbox_test_device *tdev = filp->private_data;
-	char *message;
 	void *data;
 	int ret;
 
@@ -107,13 +106,12 @@ static ssize_t mbox_test_message_write(struct file *filp,
 		return -EINVAL;
 	}
 
-	message = kzalloc(MBOX_MAX_MSG_LEN, GFP_KERNEL);
-	if (!message)
-		return -ENOMEM;
-
 	mutex_lock(&tdev->mutex);
 
-	tdev->message = message;
+	tdev->message = kzalloc(MBOX_MAX_MSG_LEN, GFP_KERNEL);
+	if (!tdev->message)
+		return -ENOMEM;
+
 	ret = copy_from_user(tdev->message, userbuf, count);
 	if (ret) {
 		ret = -EFAULT;
