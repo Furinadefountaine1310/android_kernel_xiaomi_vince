@@ -23,9 +23,9 @@ export KBUILD_BUILD_USER=Rsyd58
 export TZ=Asia/Jakarta
 export KBUILD_BUILD_HOST=non-pangu-pod
 #export VER="V4.6.15.0.REGMIXM"
-export KERNELDIR="/workspace/Rsyd58/krnlv"
+export KERNELDIR="/workspace/voting-app/krnlv"
 export USE_CCACHE=1
-export CCACHE_DIR="workspace/Rsyd58/.ccache"
+export CCACHE_DIR="workspace/voting-app/.ccache"
 export KERNELNAME="Furina"
 export SRCDIR="${KERNELDIR}"
 export OUTDIR="${KERNELDIR}/out"
@@ -33,9 +33,9 @@ export ANYKERNEL="${KERNELDIR}/AnyKernel3"
 export DEFCONFIG="vince_defconfig"
 export ZIP_DIR="${KERNELDIR}/files"
 export IMAGE="${OUTDIR}/arch/arm64/boot/Image.gz-dtb"
-export ZIPNAME="${KERNELNAME}-vince-$(date +%m%d-%H%M%S).zip"
+export ZIPNAME="${KERNELNAME}-Kernel-HM5Plus-$(date +%m%d-%H%M%S).zip"
 export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"
-TC_DIR="/workspace/weebx"
+TC_DIR="/workspace/voting-app/azure-clang"
 export PATH="$TC_DIR/bin:$PATH"
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
@@ -50,7 +50,7 @@ fi
 
 mkdir -p out
 make O=out ARCH=arm64 $DEFCONFIG
-export LOCALVERSION="-msm8953-arm64-Android-12-LAW.BR.5.1.r1"
+export LOCALVERSION="-フリーナ-V1.0.24.6.18.DEV-LA.UM.10.6.2.c26"
 export KSU=y
 make -j$(nproc --all) O=out ARCH=arm64  CC=clang HOSTCC=clang HOSTCXX=clang++ READELF=llvm-readelf HOSTAR=llvm-ar AR=llvm-ar AS=llvm-as NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-  2>&1 | tee log.txt
 #make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee log.txt
@@ -66,7 +66,7 @@ cp -v "${IMAGE}" "${ANYKERNEL}/";
 cd -;
 cd ${ANYKERNEL};
 zip -r9 ${FINAL_ZIP} *;
-gh release upload test ${FINAL_ZIP} -R github.com/Rsyd58/Rsyd58;
+gh release upload rc1 ${FINAL_ZIP} -R github.com/Rsyd58/android_kernel_xiaomi_vince;
 cd -;
 
 #echo -e "zip boot and dtbo"
