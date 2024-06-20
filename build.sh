@@ -21,8 +21,8 @@ done
 DEFCONFIG="vince_defconfig"
 export KBUILD_BUILD_USER=Rsyd58
 export TZ=Asia/Jakarta
-export KBUILD_BUILD_HOST=non-pangu-pod
-export VER="V1.0.24.6.$(date +%d).DEV"
+export KBUILD_BUILD_HOST=Penacony
+export VER="V1.5.24.6.$(date +%d).DEV"
 export KERNELDIR="/workspace/voting-app/krnlv"
 export USE_CCACHE=1
 export CCACHE_DIR="workspace/voting-app/.ccache"
@@ -50,7 +50,7 @@ fi
 
 mkdir -p out
 make O=out ARCH=arm64 $DEFCONFIG
-export LOCALVERSION="-フリーナ-${VER}-LTS"
+export LOCALVERSION="-フリーナ-${VER}"
 export KSU=y
 make -j$(nproc --all) O=out ARCH=arm64  CC=clang HOSTCC=clang HOSTCXX=clang++ READELF=llvm-readelf HOSTAR=llvm-ar AR=llvm-ar AS=llvm-as NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-  2>&1 | tee log.txt
 #make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee log.txt
