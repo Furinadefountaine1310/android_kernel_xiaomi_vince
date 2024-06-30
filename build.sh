@@ -21,11 +21,11 @@ done
 DEFCONFIG="vince_defconfig"
 export KBUILD_BUILD_USER=Rsyd58
 export TZ=Asia/Jakarta
-export KBUILD_BUILD_HOST=Penacony
+export KBUILD_BUILD_HOST=pangu-build
 export VER="V1.5.24.6.$(date +%d).DEV"
-export KERNELDIR="/workspace/voting-app/krnlv"
+export KERNELDIR="/workspace/krnlv"
 export USE_CCACHE=1
-export CCACHE_DIR="workspace/voting-app/.ccache"
+export CCACHE_DIR="workspace/.ccache"
 export KERNELNAME="Furina"
 export SRCDIR="${KERNELDIR}"
 export OUTDIR="${KERNELDIR}/out"
@@ -35,7 +35,7 @@ export ZIP_DIR="${KERNELDIR}/files"
 export IMAGE="${OUTDIR}/arch/arm64/boot/Image.gz-dtb"
 export ZIPNAME="${KERNELNAME}-Kernel-HM5Plus-$(date +%m%d-%H%M%S).zip"
 export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"
-TC_DIR="/workspace/voting-app/azure-clang"
+TC_DIR="/workspace/azure-clang"
 export PATH="$TC_DIR/bin:$PATH"
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
