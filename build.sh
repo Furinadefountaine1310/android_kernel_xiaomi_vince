@@ -1,43 +1,45 @@
-#!/bin/bash                                                                       
-echo -e "==========================="                                             
-echo -e "= START COMPILING KERNEL  ="
-echo -e "==========================="      
-                                       
-bold=$(tput bold)
+#!/bin/bash
 
-normal=$(tput sgr0)      
-                                                         
-#apt update -y && apt upgrade -y && apt install nano bc bison ca-certificates curl flex gcc git libc6-dev libssl-dev openssl python-is-python3 ssh wget zip zstd sudo make clang gcc-arm-linux-gnueabi software-properties-common build-essential libarchive-tools gcc-aarch64-linux-gnu -y && apt install build-essential -y && apt install libssl-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libreadline-dev libbz2-dev libsqlite3-dev make gcc -y && apt install pigz -y && apt install python2 -y && apt install python3 -y          
-                                               
+echo -e "==========================="
+echo -e "= START COMPILING KERNEL  ="
+echo -e "==========================="
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+#apt update -y && apt upgrade -y && apt install nano bc bison ca-certificates curl flex gcc git libc6-dev libssl-dev openssl python-is-python3 ssh wget zip zstd sudo make clang gcc-arm-linux-gnueabi software-properties-common build-essential libarchive-tools gcc-aarch64-linux-gnu -y && apt install build-essential -y && apt install libssl-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libreadline-dev libbz2-dev libsqlite3-dev make gcc -y && apt install pigz -y && apt install python2 -y && apt install python3 -y
+
+
 # Scrip option
-while (( ${#} )); do                                                                  
-case ${1} in
-        "-Z"|"--zip") ZIP=true ;;                                                     
-        esac
-    shift                                                                         
-    done
-    
-[[ -z ${ZIP} ]] && { echo "${bold}LOADING-_-....${normal}"; }                     
-DEFCONFIG="vince_defconfig"                                                       
+while (( ${#} )); do
+    case ${1} in
+        "-Z"|"--zip") ZIP=true ;;
+    esac
+    shift
+done
+[[ -z ${ZIP} ]] && { echo "${bold}LOADING-_-....${normal}"; }
+
+DEFCONFIG="vince_defconfig"
 export KBUILD_BUILD_USER=Rsyd58
-export TZ=Asia/Jakarta                                                            
+export TZ=Asia/Jakarta
+export KBUILD_BUILD_HOST=pangu-build-component-system-274199-jcsqz-f3hx5-rr18w
+export KBUILD_BUILD_TIMESTAMP="Mon Mar  4 13:14:07 WIB 2024"
 #export KBUILD_BUILD_HOST=pangu-build-component-system-259085-sszc7-9hw67-g26jh
-#export VER="V1.0.24.7.$(date +%d).TEGMIXM"                                       
-export KERNELDIR="/workspace/temporary/krnl"
-export USE_CCACHE=1                                                               
-export CCACHE_DIR="workspace/temporary/.ccache"
-export KERNELNAME="Test"                                                          
+#export VER="V1.0.24.7.$(date +%d).TEGMIXM"
+export KERNELDIR="/workspaces/File_Rom/krnl"
+export USE_CCACHE=1
+export CCACHE_DIR="workspaces/File_Rom/.ccache"
+export KERNELNAME="Test"
 export SRCDIR="${KERNELDIR}"
-export OUTDIR="${KERNELDIR}/out"                                                  
+export OUTDIR="${KERNELDIR}/out"
 export ANYKERNEL="${KERNELDIR}/AnyKernel3"
-export DEFCONFIG="vince_defconfig"                                                
+export DEFCONFIG="vince_defconfig"
 export ZIP_DIR="${KERNELDIR}/files"
-export IMAGE="${OUTDIR}/arch/arm64/boot/Image.gz-dtb"                             
+export IMAGE="${OUTDIR}/arch/arm64/boot/Image.gz-dtb"
 #export DTBO="${OUTDIR}/arch/arm64/boot/dtbo.img"
-#export DTB="${OUTDIR}/arch/arm64/boot/dts/qcom/trinket.dtb"                      
+#export DTB="${OUTDIR}/arch/arm64/boot/dts/qcom/trinket.dtb"
 export ZIPNAME="${KERNELNAME}-Kernel-vince-$(date +%m%d-%H%M%S).zip"
-export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"                                          
-TC_DIR="/workspace/temporary/weebx"
+export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"
+TC_DIR="/workspaces/File_Rom/azure-clang"
 export PATH="$TC_DIR/bin:$PATH"
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
@@ -52,7 +54,7 @@ fi
 
 mkdir -p out
 make O=out ARCH=arm64 $DEFCONFIG
-export LOCALVERSION=""
+export LOCALVERSION="-perf-フリーナ"
 make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld HOSTCC=clang HOSTCXX=clang++ READELF=llvm-readelf HOSTAR=llvm-ar AR=llvm-ar AS=llvm-as NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-  2>&1 | tee log.txt
 #make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee log.txt
     echo -e "==========================="
@@ -78,3 +80,4 @@ cd -;
 if [[ ":v" ]]; then
 exit
 fi
+#gh release upload test files/${FINAL_ZIP} -R github.com/Rsyd58/Rsyd58
