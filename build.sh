@@ -19,10 +19,11 @@ done
 [[ -z ${ZIP} ]] && { echo "${bold}LOADING-_-....${normal}"; }
 
 DEFCONFIG="vince_defconfig"
-export KBUILD_BUILD_USER=Rsyd58
+export KBUILD_BUILD_USER=nobody
 export TZ=Asia/Jakarta
-export KBUILD_BUILD_HOST=pangu-build-component-system-274199-jcsqz-f3hx5-rr18w
-export KBUILD_BUILD_TIMESTAMP="Mon Mar  4 13:14:07 WIB 2024"
+export KBUILD_BUILD_HOST=android-build-running-by-Rsyd58
+export KBUILD_BUILD_VERSION=1
+export KBUILD_BUILD_TIMESTAMP="Thu Jan 1 07:00:00 WIB 2009"
 #export KBUILD_BUILD_HOST=pangu-build-component-system-259085-sszc7-9hw67-g26jh
 #export VER="V1.0.24.7.$(date +%d).TEGMIXM"
 export KERNELDIR="/workspaces/File_Rom/krnl"

@@ -57,10 +57,10 @@ config CPU_FREQ_TIMES
 choice
 	prompt "Default CPUFreq governor"
 	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1100_CPUFREQ || ARM_SA1110_CPUFREQ
-	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+	default CPU_FREQ_DEFAULT_GOV_WALT
 	help
 	  This option sets which CPUFreq governor shall be loaded at
-	  startup. If in doubt, select 'performance'.
+	  startup. If in doubt, select 'walt'.
 
 config CPU_FREQ_DEFAULT_GOV_PERFORMANCE
 	bool "performance"
@@ -141,11 +141,6 @@ config CPU_FREQ_DEFAULT_GOV_WALT
 	bool "walt"
 	depends on SMP
 	select CPU_FREQ_GOV_WALT
-	select CPU_FREQ_GOV_PERFORMANCE
-	help
-	  Use the 'game' CPUFreq governor by default. If unsure,
-	  have a look at the help section of that governor. The fallback
-	  governor will be 'performance'.
 
 config CPU_FREQ_DEFAULT_GOV_ENERGY_DCFC
 	bool "energy_dcfc"
@@ -190,6 +185,7 @@ endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
 	tristate "'performance' governor"
+	default n
 	help
 	  This cpufreq governor sets the frequency statically to the
 	  highest available CPU frequency.
@@ -201,6 +197,7 @@ config CPU_FREQ_GOV_PERFORMANCE
 
 config CPU_FREQ_GOV_POWERSAVE
 	tristate "'powersave' governor"
+	default n
 	help
 	  This cpufreq governor sets the frequency statically to the
 	  lowest available CPU frequency.
@@ -212,6 +209,7 @@ config CPU_FREQ_GOV_POWERSAVE
 
 config CPU_FREQ_GOV_USERSPACE
 	tristate "'userspace' governor for userspace frequency scaling"
+	default n
 	help
 	  Enable this cpufreq governor when you either want to set the
 	  CPU frequency manually or when a userspace program shall
@@ -228,6 +226,7 @@ config CPU_FREQ_GOV_USERSPACE
 config CPU_FREQ_GOV_ONDEMAND
 	tristate "'ondemand' cpufreq policy governor"
 	select CPU_FREQ_GOV_COMMON
+	default n
 	help
 	  'ondemand' - This driver adds a dynamic cpufreq policy governor.
 	  The governor does a periodic polling and 
@@ -247,6 +246,7 @@ config CPU_FREQ_GOV_CONSERVATIVE
 	tristate "'conservative' cpufreq governor"
 	depends on CPU_FREQ
 	select CPU_FREQ_GOV_COMMON
+	default n
 	help
 	  'conservative' - this driver is rather similar to the 'ondemand'
 	  governor both in its source code and its purpose, the difference is
@@ -283,6 +283,7 @@ config CPU_FREQ_GOV_SCHEDUTIL
 	depends on CPU_FREQ && SMP
 	select CPU_FREQ_GOV_ATTR_SET
 	select IRQ_WORK
+	default n
 	help
 	  This governor makes decisions based on the utilization data provided
 	  by the scheduler.  It sets the CPU frequency to be proportional to
@@ -300,7 +301,7 @@ config CPU_FREQ_GOV_BLU_SCHEDUTIL
 	depends on CPU_FREQ
 	select CPU_FREQ_GOV_ATTR_SET
 	select IRQ_WORK
-        default y
+        default n
         help
 	  To compile this driver as a module, choose M here: the module 
 	  be called cpufreq_blu_schedutil.
@@ -312,7 +313,7 @@ config CPU_FREQ_GOV_PIXUTIL
 	depends on CPU_FREQ
 	select CPU_FREQ_GOV_ATTR_SET
 	select IRQ_WORK
-	default y
+	default n
 	help
 	  This governor makes decisions based on the utilization data provided
 	  by the scheduler.  It sets the CPU frequency to be proportional to
@@ -343,7 +344,7 @@ config CPU_FREQ_GOV_LIGHTNINGUTIL
 	depends on CPU_FREQ && SMP
 	select CPU_FREQ_GOV_ATTR_SET
 	select IRQ_WORK
-	default y
+	default n
 	help
 	  This governor makes decisions based on the utilization data provided
 	  by the scheduler.  It sets the CPU frequency to be proportional to
@@ -360,7 +361,7 @@ config CPU_FREQ_GOV_ENERGY_DCFC
 	depends on CPU_FREQ && SMP
 	select CPU_FREQ_GOV_ATTR_SET
 	select IRQ_WORK
-	default y
+	default n
 	help
 	  This governor makes decisions based on the utilization data provided
 	  by the scheduler.  It sets the CPU frequency to be proportional to
@@ -379,7 +380,7 @@ config CPU_FREQ_GOV_HELIX_SCHEDUTIL
 	depends on CPU_FREQ && SMP
 	select CPU_FREQ_GOV_ATTR_SET
 	select IRQ_WORK
-	default y
+	default n
 	help
 	  This governor makes decisions based on the utilization data provided
           by the scheduler.  It sets the CPU frequency to be proportional to
@@ -397,7 +398,7 @@ config CPU_FREQ_GOV_PIXEL_SMURFUTIL
 	depends on CPU_FREQ && SMP
 	select CPU_FREQ_GOV_ATTR_SET
 	select IRQ_WORK
-	default y
+	default n
 	help
 	  This governor makes decisions based on the utilization data provided
 	  by the scheduler.  It sets the CPU frequency to be proportional to
