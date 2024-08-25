@@ -36,13 +36,37 @@ service hiderror /system/bin/sh -c "settings put global hide_error_dialogs 1"
     oneshot
     disabled
 
+service wndw /system/bin/sh -c "settings put global window_animation_scale 0.5"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
+    
+service trnst /system/bin/sh -c "settings put global transition_animation_scale 0.5"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
+    
+service anmtr /system/bin/sh -c "settings put global animator_duration_scale 0.5"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
+    
 on early-boot
+    start anmtr
+    start wndw
+    start trnst
     start hw
     start hiderror
 
 on property:sys.boot_completed=1
     start hw
     start hiderror
+    start anmtr
+    start wndw
+    start trnst
     chown system system /sys/class/leds/led:torch_1/max_brightness
     chown system system /sys/devices/system/cpu/cpufreq/walt/down_rate_limit_us
     chown system system /sys/devices/system/cpu/cpufreq/walt/up_rate_limit_us
