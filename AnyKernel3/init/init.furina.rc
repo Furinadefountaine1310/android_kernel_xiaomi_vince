@@ -36,19 +36,19 @@ service hiderror /system/bin/sh -c "settings put global hide_error_dialogs 1"
     oneshot
     disabled
 
-service wndw /system/bin/sh -c "settings put global window_animation_scale 0.5"
+service wndw /system/bin/sh -c "settings put global window_animation_scale 0.25"
     seclabel u:r:shell:s0
     user root
     oneshot
     disabled
     
-service trnst /system/bin/sh -c "settings put global transition_animation_scale 0.5"
+service trnst /system/bin/sh -c "settings put global transition_animation_scale 0.25"
     seclabel u:r:shell:s0
     user root
     oneshot
     disabled
     
-service anmtr /system/bin/sh -c "settings put global animator_duration_scale 0.5"
+service anmtr /system/bin/sh -c "settings put global animator_duration_scale 0.25"
     seclabel u:r:shell:s0
     user root
     oneshot
@@ -78,7 +78,7 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpufreq/walt/up_rate_limit_us 500
     write /sys/devices/system/cpu/cpufreq/walt/hispeed_freq 652800
     write /sys/class/graphics/fb0/idle_time 100
-    write /proc/sys/vm/vfs_cache_pressure 75
+    write /proc/sys/vm/vfs_cache_pressure 125
     write /proc/sys/vm/user_reserve_kbytes 0
     write /proc/sys/vm/admin_reserve_kbytes 0
     write /proc/sys/kernel/sched_lib_name "UnityMain,libunity.so,com.miHoYo.,libunity.so,libfb.so,liblogic.so,libssgamesdkcronet.so,libil2cpp.so,com.activision."
