@@ -19,16 +19,12 @@ done
 [[ -z ${ZIP} ]] && { echo "${bold}LOADING-_-....${normal}"; }
 
 DEFCONFIG="vince_defconfig"
-export KBUILD_BUILD_USER=nobody
+export KBUILD_BUILD_USER=Rsyd58
 export TZ=Asia/Jakarta
-export KBUILD_BUILD_HOST=android-build-running-by-Rsyd58
 export KBUILD_BUILD_VERSION=1
-export KBUILD_BUILD_TIMESTAMP="Thu Jan 1 07:00:00 WIB 2009"
-#export KBUILD_BUILD_HOST=pangu-build-component-system-259085-sszc7-9hw67-g26jh
-#export VER="V1.0.24.7.$(date +%d).TEGMIXM"
+#export KBUILD_BUILD_TIMESTAMP="Thu Jan 1 07:00:00 WIB 2009"
+export KBUILD_BUILD_HOST=non-pangu-pod
 export KERNELDIR="/workspaces/File_Rom/krnl"
-export USE_CCACHE=1
-export CCACHE_DIR="workspaces/File_Rom/.ccache"
 export KERNELNAME="Test"
 export SRCDIR="${KERNELDIR}"
 export OUTDIR="${KERNELDIR}/out"
@@ -36,8 +32,6 @@ export ANYKERNEL="${KERNELDIR}/AnyKernel3"
 export DEFCONFIG="vince_defconfig"
 export ZIP_DIR="${KERNELDIR}/files"
 export IMAGE="${OUTDIR}/arch/arm64/boot/Image.gz-dtb"
-#export DTBO="${OUTDIR}/arch/arm64/boot/dtbo.img"
-#export DTB="${OUTDIR}/arch/arm64/boot/dts/qcom/trinket.dtb"
 export ZIPNAME="${KERNELNAME}-Kernel-vince-$(date +%m%d-%H%M%S).zip"
 export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"
 TC_DIR="/workspaces/File_Rom/azure-clang"
@@ -57,7 +51,6 @@ mkdir -p out
 make O=out ARCH=arm64 $DEFCONFIG
 export LOCALVERSION="-perf-フリーナ"
 make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld HOSTCC=clang HOSTCXX=clang++ READELF=llvm-readelf HOSTAR=llvm-ar AR=llvm-ar AS=llvm-as NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-  2>&1 | tee log.txt
-#make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee log.txt
     echo -e "==========================="
     echo -e "   COMPILE KERNEL COMPLETE "
     echo -e "==========================="
@@ -75,10 +68,6 @@ zip -r9 ${FINAL_ZIP} *;
 gh release upload 1.0.1.0 ${FINAL_ZIP} -R github.com/Rsyd58/releases;
 cd -;
 
-#echo -e "zip boot and dtbo"
-#rm -rf kernel.zip && cd out/arch/arm64/boot && zip kernel.zip Image.gz-dtb && mv kernel.zip ../../../../
-
 if [[ ":v" ]]; then
 exit
 fi
-#gh release upload test files/${FINAL_ZIP} -R github.com/Rsyd58/Rsyd58
