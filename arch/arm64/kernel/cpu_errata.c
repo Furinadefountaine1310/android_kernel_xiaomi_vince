@@ -23,6 +23,9 @@
 #include <asm/cpu.h>
 #include <asm/cputype.h>
 #include <asm/cpufeature.h>
+#include <uapi/linux/psci.h>
+#include <linux/arm-smccc.h>
+#include <linux/psci.h>
 
 static bool __maybe_unused
 is_affected_midr_range(const struct arm64_cpu_capabilities *entry, int scope)
@@ -154,10 +157,6 @@ static int enable_psci_bp_hardening(void *data)
 	return 0;
 }
 #endif
-
-#include <uapi/linux/psci.h>
-#include <linux/arm-smccc.h>
-#include <linux/psci.h>
 
 static void call_smc_arch_workaround_1(void)
 {
