@@ -22,17 +22,17 @@ DEFCONFIG="vince_defconfig"
 export KBUILD_BUILD_USER=Rsyd58
 export TZ=Asia/Jakarta
 export KBUILD_BUILD_VERSION=1
-#export KBUILD_BUILD_TIMESTAMP="Thu Jan 1 07:00:00 WIB 2009"
+#export KBUILD_BUILD_TIMESTAMP="Thu Jan 1 07:00:00 WIB 2023"
 export KBUILD_BUILD_HOST=non-pangu-pod
-export KERNELDIR="/workspaces/File_Rom/krnl"
-export KERNELNAME="Test"
+export KERNELDIR="/workspaces/File_Rom/kt"
+export KERNELNAME="Furina"
 export SRCDIR="${KERNELDIR}"
 export OUTDIR="${KERNELDIR}/out"
 export ANYKERNEL="${KERNELDIR}/AnyKernel3"
 export DEFCONFIG="vince_defconfig"
 export ZIP_DIR="${KERNELDIR}/files"
 export IMAGE="${OUTDIR}/arch/arm64/boot/Image.gz-dtb"
-export ZIPNAME="${KERNELNAME}-Kernel-vince-$(date +%m%d-%H%M%S).zip"
+export ZIPNAME="${KERNELNAME}-Kernel-KSU-vince-$(date +%m%d-%H%M%S)-OC.zip"
 export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"
 TC_DIR="/workspaces/File_Rom/azure-clang"
 export PATH="$TC_DIR/bin:$PATH"
@@ -49,7 +49,6 @@ fi
 
 mkdir -p out
 make O=out ARCH=arm64 $DEFCONFIG
-export LOCALVERSION="-perf-フリーナ"
 make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld HOSTCC=clang HOSTCXX=clang++ READELF=llvm-readelf HOSTAR=llvm-ar AR=llvm-ar AS=llvm-as NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-  2>&1 | tee log.txt
     echo -e "==========================="
     echo -e "   COMPILE KERNEL COMPLETE "
@@ -65,7 +64,7 @@ cp -v "${IMAGE}" "${ANYKERNEL}/";
 cd -;
 cd ${ANYKERNEL};
 zip -r9 ${FINAL_ZIP} *;
-gh release upload 1.0.1.0 ${FINAL_ZIP} -R github.com/Rsyd58/releases;
+gh release upload v0.0.1 ${FINAL_ZIP} -R github.com/Rsyd58/android_kernel_xiaomi_vince;
 cd -;
 
 if [[ ":v" ]]; then
