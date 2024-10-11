@@ -656,23 +656,6 @@ config TCP_CONG_BBR
 	bufferbloat, policers, or AQM schemes that do not provide a delay
 	signal. It requires the fq ("Fair Queue") pacing packet scheduler.
 
-config TCP_CONG_TSUNAMI
-        tristate "Tsunami - BBR Based TCP Congestion with magic optimiztion"
-        default y
-        ---help---
-
-	Tsunami TCP Congestion Control - BBR Based TCP Congedtion with magic optimiztion
-	Modified by Yankee.
-
-config TCP_CONG_SCALABLE_RE
-	tristate "Scalable RE TCP"
-	default y
-	---help---
-	Scalable RE TCP is a sender-side only change to TCP which uses a
-	MIMD congestion control algorithm which has some nice scaling
-	properties, though is known to have fairness issues.
-	See http://www.deneholme.net/tom/scalable/
-
 choice
 	prompt "Default TCP congestion control"
 	default DEFAULT_BBR
