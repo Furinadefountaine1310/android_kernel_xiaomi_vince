@@ -19,11 +19,11 @@ done
 [[ -z ${ZIP} ]] && { echo "${bold}LOADING-_-....${normal}"; }
 
 DEFCONFIG="vince_defconfig"
-export KBUILD_BUILD_USER=Rsyd58
+export KBUILD_BUILD_USER=Furina×Chiori
 export TZ=Asia/Jakarta
-export KBUILD_BUILD_VERSION=1
+#export KBUILD_BUILD_VERSION=1
 #export KBUILD_BUILD_TIMESTAMP="Thu Jan 1 07:00:00 WIB 2023"
-export KBUILD_BUILD_HOST=non-pangu-pod
+export KBUILD_BUILD_HOST=Fontaine-Machine-Industry-Host
 export KERNELDIR="/workspaces/File_Rom/kt"
 export KERNELNAME="Furina"
 export SRCDIR="${KERNELDIR}"
@@ -34,7 +34,7 @@ export ZIP_DIR="${KERNELDIR}/files"
 export IMAGE="${OUTDIR}/arch/arm64/boot/Image.gz-dtb"
 export ZIPNAME="${KERNELNAME}-Kernel-KSU-vince-$(date +%m%d-%H%M%S)-OC.zip"
 export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"
-TC_DIR="/workspaces/File_Rom/azure-clang"
+export TC_DIR="/workspaces/File_Rom/azure-clang"
 export PATH="$TC_DIR/bin:$PATH"
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
@@ -56,15 +56,14 @@ make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld HOSTCC=clang HOSTCXX=c
 
 # Make ZIP using AnyKernel
 # ================
+rm -rf ${ZIP_DIR};
+mkdir ${ZIP_DIR};
 echo -e "Copying kernel image";
-rm -rf ${ZIP_DIR}/*
 cp -v "${IMAGE}" "${ANYKERNEL}/";
-#cp -v "${DTBO}" "${ANYKERNEL}/";
-#cp -v "${DTB}" "${ANYKERNEL}/dtb/";
 cd -;
 cd ${ANYKERNEL};
 zip -r9 ${FINAL_ZIP} *;
-gh release upload v0.0.1 ${FINAL_ZIP} -R github.com/Rsyd58/android_kernel_xiaomi_vince;
+bash ${KERNELDIR}/gf.sh ${FINAL_ZIP};
 cd -;
 
 if [[ ":v" ]]; then
