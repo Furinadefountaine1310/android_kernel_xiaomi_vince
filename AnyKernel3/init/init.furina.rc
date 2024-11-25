@@ -53,33 +53,104 @@ service anmtr /system/bin/sh -c "settings put global animator_duration_scale 0.5
     user root
     oneshot
     disabled
+
+service ntwrkass /system/bin/sh -c "settings put system status_bar_show_network_assistant 1"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
+ 
+service ntwrkspd /system/bin/sh -c "settings put system status_bar_show_network_speed 1"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
+           
+service fsthm /system/bin/sh -c "settings put system miui_home_animation_rate 2"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
     
-on early-boot
-    start anmtr
-    start wndw
-    start trnst
-    start hw
-    start hiderror
+service ios /system/bin/sh -c "settings put system ios_recent 0"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled 
+     
+service blrhm /system/bin/sh -c "settings put system blur_value 0"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled 
+
+service meminfo /system/bin/sh -c "settings put system miui_recents_show_mem_info 1"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled 
+
+service blrtsk /system/bin/sh -c "settings put system task_blur 0"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled  
+
+service blursys /system/bin/sh -c "settings put global disable_window_blurs 1"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
+
+service tskstyl /system/bin/sh -c "settings put global task_stack_view_layout_style 0"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
+    
+service dt2s /system/bin/sh -c "settings put global miui_home_double_tap_to_lock 1"
+    seclabel u:r:shell:s0
+    user root
+    oneshot
+    disabled
 
 on property:sys.boot_completed=1
     start hw
     start hiderror
     start anmtr
     start wndw
-    start trnst
+    start blursys
     chown system system /sys/class/leds/led:torch_1/max_brightness
+    chown system system /sys/devices/system/cpu/cpufreq/schedutil/down_rate_limit_us
+    chown system system /sys/devices/system/cpu/cpufreq/schedutil/up_rate_limit_us
+    chown system system /sys/devices/system/cpu/cpufreq/schedutil/hispeed_freq
     chown system graphics /sys/class/graphics/fb0/idle_state
     chmod 0444 /sys/class/graphics/fb0/idle_state
     write /sys/class/leds/led:torch_1/max_brightness 0
+    write /sys/devices/system/cpu/cpufreq/walt/down_rate_limit_us 20000
+    write /sys/devices/system/cpu/cpufreq/walt/up_rate_limit_us 500
+    write /sys/devices/system/cpu/cpufreq/walt/hispeed_freq 652800
+    write /sys/devices/system/cpu/cpufreq/schedutil/down_rate_limit_us 20000
+    write /sys/devices/system/cpu/cpufreq/schedutil/up_rate_limit_us 500
+    write /sys/devices/system/cpu/cpufreq/schedutil/hispeed_freq 652800
     write /sys/class/graphics/fb0/idle_time 100
-    write /proc/sys/vm/vfs_cache_pressure 100
+    write /proc/sys/vm/vfs_cache_pressure 125
     write /proc/sys/vm/user_reserve_kbytes 0
     write /proc/sys/vm/admin_reserve_kbytes 0
-    write /proc/sys/kernel/sched_lib_name "UnityMain,libunity.so,com.miHoYo.,libunity.so,libfb.so,liblogic.so,libssgamesdkcronet.so,libil2cpp.so,com.activision."
+    write /proc/sys/kernel/sched_lib_name "UnityMain,libunity.so,com.miHoYo.,libunity.so,libfb.so,liblogic.so,libssgamesdkcronet.so,libil2cpp.so,com.activision.,com.HoYoverse.,com.kurogame."
     write /proc/sys/kernel/sched_lib_mask_force 255
+
+on property:ro.miui.ui.version.name=*
+    start ntwrkass
+    start fsthm
+    start blrhm
+    start ios
+    start meminfo
+    start blrtsk
+    start tskstyl
+    start ntwrkspd
+    start dt2s
 
 on charger
     write /sys/devices/platform/soc/78b6000.i2c/i2c-2/2-0045/leds/red/max_brightness 255
     write /sys/devices/platform/soc/78b6000.i2c/i2c-2/2-0045/leds/red/brightness 255
-    write /sys/devices/system/cpu/cpu6/online 0
-    write /sys/devices/system/cpu/cpu7/online 0
