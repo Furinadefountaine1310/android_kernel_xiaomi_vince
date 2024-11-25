@@ -132,7 +132,7 @@ static DEFINE_PER_CPU(struct waltgov_cpu, waltgov_cpu);
 static unsigned int stale_ns;
 static DEFINE_PER_CPU(struct waltgov_tunables *, cached_tunables);
 
-#define DEFAULT_TARGET_LOAD (100)
+#define DEFAULT_TARGET_LOAD (0)
 static int default_target_loads[] = {DEFAULT_TARGET_LOAD};
 
 /************************ Governor internals ***********************/
