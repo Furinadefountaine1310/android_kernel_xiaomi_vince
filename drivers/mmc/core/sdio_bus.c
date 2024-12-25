@@ -227,9 +227,7 @@ static struct bus_type sdio_bus_type = {
 	.uevent		= sdio_bus_uevent,
 	.probe		= sdio_bus_probe,
 	.remove		= sdio_bus_remove,
-	#ifndef CONFIG_SUSPEND_SKIP_SYNC
 	.pm		= &sdio_bus_pm_ops,
-	#endif
 };
 
 int sdio_register_bus(void)
@@ -284,12 +282,6 @@ static void sdio_release_func(struct device *dev)
 	 */
 	put_device(&func->card->dev);
 
-	/*
-	 * We have now removed the link to the tuples in the
-	 * card structure, so remove the reference.
-	 */
-	put_device(&func->card->dev);
-
 	kfree(func->info);
 	kfree(func->tmpbuf);
 	kfree(func);
@@ -319,12 +311,6 @@ struct sdio_func *sdio_alloc_func(struct mmc_card *card)
 	func->card = card;
 
 	device_initialize(&func->dev);
-
-	/*
-	 * We may link to tuples in the card structure,
-	 * we need make sure we have a reference to it.
-	 */
-	get_device(&func->card->dev);
 
 	func->dev.parent = &card->dev;
 	func->dev.bus = &sdio_bus_type;
@@ -378,9 +364,10 @@ int sdio_add_func(struct sdio_func *func)
  */
 void sdio_remove_func(struct sdio_func *func)
 {
-	if (sdio_func_present(func))
-		device_del(&func->dev);
+	if (!sdio_func_present(func))
+		return;
 
+	device_del(&func->dev);
 	of_node_put(func->dev.of_node);
 	put_device(&func->dev);
 }

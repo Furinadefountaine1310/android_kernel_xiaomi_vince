@@ -3348,12 +3348,22 @@ int mmc_blk_cmdq_issue_flush_rq(struct mmc_queue *mq, struct request *req)
 	cmdq_req->mrq.cmd = &cmdq_req->cmd;
 	cmdq_req->tag = req->tag;
 
-	err = mmc_cmdq_prepare_flush(cmdq_req->mrq.cmd);
-	if (err) {
-		pr_err("%s: failed (%d) preparing flush req\n",
-		       mmc_hostname(host), err);
-		return err;
+	if (card->ext_csd.barrier_support) {
+		err = mmc_cmdq_prepare_cache_barrier(cmdq_req->mrq.cmd);
+		if (err) {
+			pr_err("%s: failed (%d) preparing barrier req\n",
+					mmc_hostname(host), err);
+			return err;
+		}
+	} else {
+		err = mmc_cmdq_prepare_flush(cmdq_req->mrq.cmd);
+		if (err) {
+			pr_err("%s: failed (%d) preparing flush req\n",
+					mmc_hostname(host), err);
+			return err;
+		}
 	}
+
 	err = mmc_blk_cmdq_start_req(card->host, cmdq_req);
 	return err;
 }
@@ -4913,9 +4923,7 @@ static SIMPLE_DEV_PM_OPS(mmc_blk_pm_ops, mmc_blk_suspend, mmc_blk_resume);
 static struct mmc_driver mmc_driver = {
 	.drv		= {
 		.name	= "mmcblk",
-	#ifndef CONFIG_SUSPEND_SKIP_SYNC
 		.pm	= &mmc_blk_pm_ops,
-	#endif
 	},
 	.probe		= mmc_blk_probe,
 	.remove		= mmc_blk_remove,
