@@ -867,8 +867,7 @@ endif
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
 
 ifeq ($(ld-name),lld)
-KBUILD_LDFLAGS += --lto-O3
-LDFLAGS += --lto-O3
+KBUILD_LDFLAGS += -O3
 endif
 
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
